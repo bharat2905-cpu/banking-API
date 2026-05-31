@@ -7,12 +7,12 @@ pipeline {
         buildDiscarder(logRotator(daysToKeepStr: '14', numToKeepStr: '10'))
     }
 
-    tools {
-        // Assumes Jenkins global JDK installation named "JDK11"
-        jdk 'JDK11'
-        // If you're using Maven in your Jenkins tools config:
-        maven 'Maven3'
-    }
+    // tools {
+    //     // Assumes Jenkins global JDK installation named "JDK11"
+    //     jdk 'JDK11'
+    //     // If you're using Maven in your Jenkins tools config:
+    //     maven 'Maven3'
+    // }
 
     environment {
         // Example environment variables
