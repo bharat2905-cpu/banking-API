@@ -29,13 +29,23 @@ pipeline {
                     branches: [[name: env.GIT_BRANCH ?: '*/main']],
                     userRemoteConfigs: [[url: 'https://github.com/bharat2905-cpu/banking-API.git']]
                 ])
+
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: env.GIT_BRANCH ?: '*/main']],
+                    userRemoteConfigs: [[url: 'https://github.com/bharat2905-cpu/webapp.git ']]
+                ])
             }
         }
 
         stage('Build & Test') {
             steps {
                 // If using the Maven wrapper (./mvnw), replace with that
-                sh 'mvn clean verify -B'
+                sh '''
+                mvn clean verify -B
+                
+                zip -r build.zip .
+                '''
             }
             post {
                 always {
@@ -45,6 +55,14 @@ pipeline {
                 success {
                     archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
                 }
+            }
+        }
+
+        stage('Build webapp'){
+            steps{
+                sh'''
+                zip -r build1.zip .
+                '''
             }
         }
 
@@ -76,7 +94,7 @@ pipeline {
             }
         }
 
-        stage('Docker Build & Push') {
+        stage('Docker Build') {
             when {
                 branch 'main'
             }
